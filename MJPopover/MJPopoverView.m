@@ -60,6 +60,7 @@
         _popoverContainerVC = popoverContainerVC;
 
 		self.backgroundColor = [UIColor clearColor];
+        self.alpha = 0.0;
 
         [self calculateGeometryFromRect:rect inView:view];
         [_popoverView addSubview:_popoverContainerVC.MJPopoverController.contentViewController.view];
@@ -67,10 +68,15 @@
     return self;
 }
 
-
-
 - (void)animatePopover
 {
+    _arrowView.alpha = 1.0;
+    _popoverView.alpha = 1.0;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alpha = 1.0;
+    }];
+#warning TODO: Better animation
+    /*
     CGAffineTransform originalTransform = _popoverView.transform;
     CGRect originalFrame = _popoverView.frame;
     _popoverView.center = _arrowView.center;
@@ -97,6 +103,7 @@
         }];
 
     } completion:nil];
+     */
 }
 
 - (void)calculateGeometryFromRect:(CGRect)rect inView:(UIView*)view
@@ -444,6 +451,7 @@
         [popoverView setClipsToBounds:YES];
         [popoverView.layer setCornerRadius:10.0];
         [popoverView setBackgroundColor:[UIColor whiteColor]];
+        popoverView.alpha = 0.0;
         [self addSubview:popoverView];
         _popoverView = popoverView;
     }
