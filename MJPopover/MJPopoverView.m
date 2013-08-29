@@ -116,6 +116,10 @@
     startFrame.size.width += kMJPopoverPadding*2.0;
     startFrame.size.height += kMJPopoverPadding*2.0;
     startFrame.origin = [view convertRect:rect toView:rootVC.view].origin;
+    if (!IS_IOS_7_OR_GREATER)
+    {
+        startFrame.origin.y -= [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
 
     if (![self calculateFrameAndArrowDirectionFromRect:rect withStartFrame:startFrame permittedArrowDirections:_arrowDirections forceFit:NO])
     {
@@ -183,6 +187,12 @@
                             }
 
                             CGFloat maxHeight = rootVC.view.bounds.size.height - startFrame.origin.y - rect.size.height - kMJPopoverArrowHeight - kMJPopoverMargin;
+
+                            if (!IS_IOS_7_OR_GREATER)
+                            {
+                                maxHeight -= [UIApplication sharedApplication].statusBarFrame.size.height;
+                            }
+
                             if (maxHeight < kMJPopoverMinimumHeight)
                             {
                                 frame.size.height = MAXFLOAT;
@@ -225,6 +235,12 @@
                             }
 
                             CGFloat maxHeight = startFrame.origin.y - kMJPopoverArrowHeight - kMJPopoverMargin;
+
+                            if (!IS_IOS_7_OR_GREATER)
+                            {
+                                maxHeight -= [UIApplication sharedApplication].statusBarFrame.size.height;
+                            }
+
                             if (maxHeight < kMJPopoverMinimumHeight)
                             {
                                 frame.size.height = MAXFLOAT;
@@ -267,6 +283,12 @@
                             }
 
                             CGFloat maxHeight = rootVC.view.bounds.size.height - kMJPopoverMargin*2.0;
+
+                            if (!IS_IOS_7_OR_GREATER)
+                            {
+                                maxHeight -= [UIApplication sharedApplication].statusBarFrame.size.height;
+                            }
+
                             if (maxHeight < kMJPopoverMinimumHeight)
                             {
                                 frame.size.height = MAXFLOAT;
@@ -309,6 +331,12 @@
                             }
 
                             CGFloat maxHeight = rootVC.view.bounds.size.height - kMJPopoverMargin*2.0;
+
+                            if (!IS_IOS_7_OR_GREATER)
+                            {
+                                maxHeight -= [UIApplication sharedApplication].statusBarFrame.size.height;
+                            }
+
                             if (maxHeight < kMJPopoverMinimumHeight)
                             {
                                 frame.size.height = MAXFLOAT;
@@ -441,7 +469,7 @@
     }
     else
     {
-        [_arrowView setFrame:rect];
+        [_arrowView setFrame:rect andArrowDirection:arrowDirection];
     }
 
     if (_popoverView == nil)

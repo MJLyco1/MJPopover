@@ -35,4 +35,6 @@
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
 
+- (void)contentDidChange;
+
 @end

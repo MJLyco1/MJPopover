@@ -44,7 +44,7 @@
 
 @end
 
-@interface MJPopoverController : NSObject <UIAppearanceContainer>
+@interface MJPopoverController :  NSObject <UIAppearanceContainer>
 
 /* The view controller provided becomes the content view controller for the UIPopoverController. This is the designated initializer for UIPopoverController.
  */

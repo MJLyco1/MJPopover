@@ -32,4 +32,6 @@
 
 - (id)initWithFrame:(CGRect)frame andArrowDirection:(UIPopoverArrowDirection)arrowDirection;
 
+- (void)setFrame:(CGRect)frame andArrowDirection:(UIPopoverArrowDirection)arrowDirection;
+
 @end

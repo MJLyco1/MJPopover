@@ -31,14 +31,31 @@
 @end
 
 @implementation DemoViewController
+{
+    MJPopoverController *popover;
+}
 
 - (IBAction)testBarButtonItemTapped:(UIBarButtonItem *)sender
 {
     UINavigationController *navVC = [[UIStoryboard storyboardWithName:@"DemoTable" bundle:[NSBundle mainBundle]] instantiateInitialViewController];
-    navVC.preferredContentSize = CGSizeMake(200.0, 200.0);
-    
-    MJPopoverController *popover = [[MJPopoverController alloc] initWithContentViewController:navVC];
+    if(IS_IOS_7_OR_GREATER)
+    {
+        navVC.preferredContentSize = CGSizeMake(200.0, 200.0);
+    }
+    else
+    {
+        navVC.contentSizeForViewInPopover = CGSizeMake(200.0, 200.0);
+    }
+
+    popover = [[MJPopoverController alloc] initWithContentViewController:navVC];
     [popover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+
+    double delayInSeconds = 4.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        NSLog(@"setPopoverContentSize");
+        [popover setPopoverContentSize:CGSizeMake(200.0, 100.0) animated:YES];
+    });
 }
 
 - (NSUInteger)supportedInterfaceOrientations

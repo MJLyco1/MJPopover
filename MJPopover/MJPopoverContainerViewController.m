@@ -41,17 +41,25 @@
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
     CGRect frame = self.view.bounds;
-    UIButton *dimmingButton = [[UIButton alloc] initWithFrame:frame];
-    [dimmingButton setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    dimmingButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
-    dimmingButton.alpha = (animated) ? 0.0 : 1.0;
-    [dimmingButton addTarget:self action:@selector(dimmingButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:dimmingButton];
-    _dimmingButton = dimmingButton;
+
+    if (_dimmingButton == nil)
+    {
+        UIButton *dimmingButton = [[UIButton alloc] initWithFrame:frame];
+        [dimmingButton setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        dimmingButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+        dimmingButton.alpha = (animated) ? 0.0 : 1.0;
+        [dimmingButton addTarget:self action:@selector(dimmingButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:dimmingButton];
+        _dimmingButton = dimmingButton;
+    }
 
     _popoverRectView = view;
     _fromRect = rect;
 
+    if (_popoverView != nil)
+    {
+        [_popoverView removeFromSuperview];
+    }
     MJPopoverView *popoverView = [[MJPopoverView alloc] initFromRect:rect inView:view permittedArrowDirections:arrowDirections withPopoverContainerViewController:self];
     popoverView.alpha = (animated) ? 0.0 : 1.0;
     [self.view addSubview:popoverView];
@@ -61,11 +69,16 @@
     {
         [UIView animateWithDuration:0.08 animations:^{
             popoverView.alpha = 1.0;
-            dimmingButton.alpha = 1.0;
+            _dimmingButton.alpha = 1.0;
         }];
         
         [popoverView animatePopover];
     }
+}
+
+- (void)contentDidChange
+{
+    [_popoverView calculateGeometryFromRect:_fromRect inView:_popoverRectView];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
