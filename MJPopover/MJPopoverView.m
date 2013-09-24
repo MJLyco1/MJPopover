@@ -26,12 +26,12 @@
 #import "MJPopoverView.h"
 #import "MJArrowView.h"
 
-#define kMJPopoverMargin 10
-#define kMJPopoverPadding 0
-#define kMJPopoverArrowHeight 13
-#define kMJPopoverArrowWidth 26
-#define kMJPopoverMinimumHeight 100
-#define kMJPopoverMinimumWidth 80
+#define kMJPopoverMargin 10.0
+#define kMJPopoverPadding 0.0
+#define kMJPopoverArrowHeight 13.0
+#define kMJPopoverArrowWidth 26.0
+#define kMJPopoverMinimumHeight 100.0
+#define kMJPopoverMinimumWidth 80.0
 
 @implementation MJPopoverView
 {
@@ -171,10 +171,27 @@
                 case UIPopoverArrowDirectionUp:
                 {
                     frame.origin.y = startFrame.origin.y + rect.size.height + kMJPopoverArrowHeight;
+                    frame.origin.x = rect.origin.x - (frame.size.width - rect.size.width) / 2.0;
                     CGRect intersect = CGRectIntersection(frame, rootVC.view.bounds);
                     if (!CGRectEqualToRect(intersect, frame))
                     {
-                        frame.origin.x -= frame.size.width - intersect.size.width;
+                        if (frame.origin.x > 0)
+                        {
+                            frame.origin.x -= frame.size.width - intersect.size.width;
+                        }
+                        else
+                        {
+                            frame.origin.x += frame.size.width - intersect.size.width;
+                        }
+                    }
+
+                    if (frame.origin.x < kMJPopoverMargin)
+                    {
+                        frame.origin.x = kMJPopoverMargin;
+                    }
+                    else if (frame.origin.x + frame.size.width > rootVC.view.bounds.size.width - kMJPopoverMargin)
+                    {
+                        frame.origin.x = rootVC.view.bounds.size.width - frame.size.width - kMJPopoverMargin;
                     }
 
                     if (forceFit)
@@ -195,12 +212,7 @@
                                 frame.size.width = maxWidth;
                             }
 
-                            CGFloat maxHeight = rootVC.view.bounds.size.height - startFrame.origin.y - rect.size.height - kMJPopoverArrowHeight - kMJPopoverMargin;
-
-                            if (!IS_IOS_7_OR_GREATER)
-                            {
-                                maxHeight -= [UIApplication sharedApplication].statusBarFrame.size.height;
-                            }
+                            CGFloat maxHeight = rootVC.view.bounds.size.height - startFrame.origin.y - rect.size.height - kMJPopoverArrowHeight - kMJPopoverMargin - ((IS_IOS_7_OR_GREATER) ? 0.0 : 20.0);
 
                             if (maxHeight < kMJPopoverMinimumHeight)
                             {
@@ -218,10 +230,27 @@
                 case UIPopoverArrowDirectionDown:
                 {
                     frame.origin.y = startFrame.origin.y - kMJPopoverArrowHeight - frame.size.height;
+                    frame.origin.x = rect.origin.x - (frame.size.width - rect.size.width) / 2.0;
                     CGRect intersect = CGRectIntersection(frame, rootVC.view.bounds);
                     if (!CGRectEqualToRect(intersect, frame))
                     {
-                        frame.origin.x -= frame.size.width - intersect.size.width;
+                        if (frame.origin.x > 0)
+                        {
+                            frame.origin.x -= frame.size.width - intersect.size.width;
+                        }
+                        else
+                        {
+                            frame.origin.x += frame.size.width - intersect.size.width;
+                        }
+                    }
+
+                    if (frame.origin.x < kMJPopoverMargin)
+                    {
+                        frame.origin.x = kMJPopoverMargin;
+                    }
+                    else if (frame.origin.x + frame.size.width > rootVC.view.bounds.size.width - kMJPopoverMargin)
+                    {
+                        frame.origin.x = rootVC.view.bounds.size.width - frame.size.width - kMJPopoverMargin;
                     }
 
                     if (forceFit)
@@ -243,12 +272,7 @@
                                 frame.size.width = maxWidth;
                             }
 
-                            CGFloat maxHeight = startFrame.origin.y - kMJPopoverArrowHeight - kMJPopoverMargin;
-
-                            if (!IS_IOS_7_OR_GREATER)
-                            {
-                                maxHeight -= [UIApplication sharedApplication].statusBarFrame.size.height;
-                            }
+                            CGFloat maxHeight = startFrame.origin.y - kMJPopoverArrowHeight - kMJPopoverMargin - 20.0;
 
                             if (maxHeight < kMJPopoverMinimumHeight)
                             {
@@ -267,10 +291,27 @@
                 case UIPopoverArrowDirectionRight:
                 {
                     frame.origin.x = startFrame.origin.x - frame.size.width - kMJPopoverArrowHeight;
+                    frame.origin.y = rect.origin.y - (frame.size.height - rect.size.height) / 2.0;
                     CGRect intersect = CGRectIntersection(frame, rootVC.view.bounds);
                     if (!CGRectEqualToRect(intersect, frame))
                     {
-                        frame.origin.y -= frame.size.height - intersect.size.height;
+                        if (frame.origin.y > 0)
+                        {
+                            frame.origin.y -= frame.size.height - intersect.size.height;
+                        }
+                        else
+                        {
+                            frame.origin.y += frame.size.height - intersect.size.height;
+                        }
+                    }
+
+                    if (frame.origin.y < kMJPopoverMargin)
+                    {
+                        frame.origin.y = kMJPopoverMargin;
+                    }
+                    else if (frame.origin.y + frame.size.height > rootVC.view.bounds.size.height - kMJPopoverMargin)
+                    {
+                        frame.origin.y = rootVC.view.bounds.size.height - frame.size.height - kMJPopoverMargin;
                     }
 
                     if (forceFit)
@@ -292,12 +333,7 @@
                                 frame.size.width = maxWidth;
                             }
 
-                            CGFloat maxHeight = rootVC.view.bounds.size.height - kMJPopoverMargin*2.0;
-
-                            if (!IS_IOS_7_OR_GREATER)
-                            {
-                                maxHeight -= [UIApplication sharedApplication].statusBarFrame.size.height;
-                            }
+                            CGFloat maxHeight = rootVC.view.bounds.size.height - kMJPopoverMargin*2.0 - ((IS_IOS_7_OR_GREATER) ? 0.0 : 20.0);
 
                             if (maxHeight < kMJPopoverMinimumHeight)
                             {
@@ -317,10 +353,27 @@
                 case UIPopoverArrowDirectionLeft:
                 {
                     frame.origin.x = startFrame.origin.x + rect.size.width + kMJPopoverArrowHeight;
+                    frame.origin.y = rect.origin.y - (frame.size.height - rect.size.height) / 2.0;
                     CGRect intersect = CGRectIntersection(frame, rootVC.view.bounds);
                     if (!CGRectEqualToRect(intersect, frame))
                     {
-                        frame.origin.y -= frame.size.height - intersect.size.height;
+                        if (frame.origin.y > 0)
+                        {
+                            frame.origin.y -= frame.size.height - intersect.size.height;
+                        }
+                        else
+                        {
+                            frame.origin.y += frame.size.height - intersect.size.height;
+                        }
+                    }
+
+                    if (frame.origin.y < kMJPopoverMargin)
+                    {
+                        frame.origin.y = kMJPopoverMargin;
+                    }
+                    else if (frame.origin.y + frame.size.height > rootVC.view.bounds.size.height - kMJPopoverMargin)
+                    {
+                        frame.origin.y = rootVC.view.bounds.size.height - frame.size.height - kMJPopoverMargin;
                     }
 
                     if (forceFit)
@@ -342,12 +395,7 @@
                                 frame.origin.x = startFrame.origin.x + rect.size.width + kMJPopoverArrowHeight;
                             }
 
-                            CGFloat maxHeight = rootVC.view.bounds.size.height - kMJPopoverMargin*2.0;
-
-                            if (!IS_IOS_7_OR_GREATER)
-                            {
-                                maxHeight -= [UIApplication sharedApplication].statusBarFrame.size.height;
-                            }
+                            CGFloat maxHeight = rootVC.view.bounds.size.height - kMJPopoverMargin*2.0 - ((IS_IOS_7_OR_GREATER) ? 0.0 : 20.0);
 
                             if (maxHeight < kMJPopoverMinimumHeight)
                             {
